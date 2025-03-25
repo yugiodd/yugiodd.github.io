@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YuGiOh Calc</title>
+  <script src="index.js" defer></script>
+  <style>
+    table {
+      width: auto;
+      border-collapse: collapse;
+    }
+    table, th, td {
+      border: none;
+    }
+    th, td {
+      padding: 5px;
+      text-align: left;
+    }
+    th {
+      width: 150px; /* Adjust the width as needed */
+    }
+    label, button {
+      font-family: inherit; /* Use the same font as the labels */
+      font-size: inherit; /* Use the same font size as the labels */
+    }
+    input[type="number"] {
+      width: 8ch;
+    }
+    .highlight-empty {
+      background-color: #ffffcc; /* Light yellow background */
+      border: 2px solid #ffcc00; /* Yellow border */
+    }
+  </style>
+</head>
+<body>
+<h1>Yu-Gi-Oh! Odds Calculator</h1>
+
+<form id="calculatorForm">
+  <table>
+    <tr>
+      <th><label for="nStarters">Starters count:</label></th>
+      <td><input type="number" id="nStarters" name="nStarters" required></td>
+    </tr>
+    <tr>
+      <th><label for="deckSize">Deck size:</label></th>
+      <td><input type="number" id="deckSize" name="deckSize" value="40" required></td>
+    </tr>
+    <tr>
+      <th><label for="handSize">Hand size:</label></th>
+      <td><input type="number" id="handSize" name="handSize" value="5" required></td>
+    </tr>
+    <tr>
+      <th><label for="minCopies">Min copies to draw:</label></th>
+      <td><input type="number" id="minCopies" name="minCopies" value="1" required></td>
+      <th style="text-align: right"><label for="maxCopies">Max:</label></th>
+      <td><input type="number" id="maxCopies" name="maxCopies" value="5" required></td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <button type="submit" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+          Calculate
+        </button>
+      </td>
+    </tr>
+  </table>
+</form>
+
+<p id="result">&nbsp;</p>
+
+<br><br>
+<hr>
+
+<h2>Examples</h2>
+<p>
+  With A typical deck size is 40, hand size of 5,<br>
+  if you have 3 starters, the chance of drawing at least 1 starter is 33.76%.
+</p>
+
+<p>
+  With 12 starters, the chance is 85.06%.<br>
+  You will brick only 1 in 7 games, a decent consistency.<br>
+  This is the odds if you play Centur-Ion with 3 Primera, 3 Trudea, 3 Stand Up and 3 Emblema Oath.<br>
+</p>
+
+<p>
+  With 14 starters, the chance is 90.00%, ideal in my opinion.<br>
+  This is the chance if you add 2 Bonfire to the Centur-Ion deck above.<br>
+</p>
+
+<p>
+  The downside is now you have 8 Normal Summons, so 25.68% to have 2 Normal Summons in your starting hand.<br>
+  In case of 6 Normal Summons, the chance reduces to 15.42%.
+</p>
+
+
+</body>
+</html>
