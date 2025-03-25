@@ -26,7 +26,11 @@ function calculateProbability(nStarters, deckSize, handSize, minCopies, maxCopie
 		result += combination(nStarters, i) * combination(deckSize - nStarters, handSize - i) / nAllCases;
 	}
 	let rounded2Percent = Math.round(result * 10000) / 100;
-	console.log(`result: ${rounded2Percent} % (nStarters: ${nStarters}, deckSize: ${deckSize}, handSize: ${handSize}, min: ${minCopies}, max: ${maxCopies})`);
+	logURLQuery = `?result=${rounded2Percent.toFixed(2)}&nStarters=${nStarters}&deckSize=${deckSize}&handSize=${handSize}&min=${minCopies}&max=${maxCopies}`;
+	console.log(logURLQuery);
+	fetch(`https://log.daominah.uk/log${logURLQuery}`, {method: 'GET'})
+		.then(response => console.log('log sent successfully'))
+		.catch(error => console.error('error sending log:', error));
 	return rounded2Percent;
 }
 
