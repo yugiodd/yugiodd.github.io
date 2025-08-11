@@ -11,27 +11,54 @@ function combination(n, r) {
 }
 
 function calculateProbability(nStarters, deckSize, handSize, minCopies, maxCopies) {
+	// result is the probability of having at least minCopies starter cards in hand
 	let result = 0.0;
+	// // brickOnceInDuels is the average number of duels until you brick once
+	let brickOnceInDuels = 88888888;
+
+	// autocorrect inputs
+	if (isNaN(maxCopies) || maxCopies === '') {
+		// if maxCopies is not set, set it to handSize
+		maxCopies = handSize;
+	}
 	if (maxCopies > handSize) {
+		// if maxCopies is larger than handSize, set it to handSize
 		maxCopies = handSize;
 	}
 	if (maxCopies > nStarters) {
+		// if maxCopies is larger than nStarters, set it to nStarters
 		maxCopies = nStarters;
 	}
+
+	// calculate the probability by summing the probabilities of
+	// having exactly i starters in hand, where minCopies <= i <= maxCopies
 	let nAllCases = combination(deckSize, handSize);
 	if (nAllCases === 0) {
-		return 0;
+		return [0, brickOnceInDuels];
 	}
 	for (let i = minCopies; i <= maxCopies; i++) {
 		result += combination(nStarters, i) * combination(deckSize - nStarters, handSize - i) / nAllCases;
 	}
-	let rounded2Percent = Math.round(result * 10000) / 100;
-	logURLQuery = `?result=${rounded2Percent.toFixed(2)}&nStarters=${nStarters}&deckSize=${deckSize}&handSize=${handSize}&min=${minCopies}&max=${maxCopies}`;
+	if (result < 1) {
+		brickOnceInDuels = 1 / (1 - result);
+	}
+	let roundedBrickRate = brickOnceInDuels.toFixed(1);
+
+	// round the result to percent with 2 decimal places for human readability
+	let roundedGoodHandPercent = Math.round(result * 10000) / 100;
+	let logURLQuery =
+		`?result=${roundedGoodHandPercent.toFixed(2)}` +
+		`&brickOnceInDuels=${roundedBrickRate}` +
+		`&nStarters=${nStarters}` +
+		`&deckSize=${deckSize}` +
+		`&handSize=${handSize}` +
+		`&min=${minCopies}` +
+		`&max=${maxCopies}`;
 	console.log(logURLQuery);
 	fetch(`https://log.daominah.uk/log${logURLQuery}`, {method: 'GET'})
 		.then(response => console.log('log sent successfully'))
 		.catch(error => console.error('error sending log:', error));
-	return rounded2Percent;
+	return [roundedGoodHandPercent, roundedBrickRate];
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -68,7 +95,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		const probability = calculateProbability(nStarters, deckSize, handSize, minCopies, maxCopies);
 		document.getElementById('result').innerHTML = `
-        The chance to have at least ${minCopies} starters is
-        <strong>${probability.toFixed(2)}%</strong>`
+		    The chance to have at least ${minCopies} starters is
+		        <strong>${probability[0].toFixed(2)}%</strong>.
+		    <br>
+		    So, on average, play <strong>${probability[1]}</strong> duels, you will brick once.
+		`;
 	});
 });
